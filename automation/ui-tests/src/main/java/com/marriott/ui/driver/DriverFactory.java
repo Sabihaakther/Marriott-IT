@@ -1,87 +1,135 @@
 package com.marriott.ui.driver;
 
 import com.marriott.ui.config.SettingsReader;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-import java.io.File;
 import java.time.Duration;
+import java.util.Locale;
 
-public class DriverFactory {
+public final class DriverFactory {
 
     private DriverFactory() {
+        // Prevent creation of DriverFactory objects.
     }
 
+    /**
+     * Creates and configures a WebDriver instance based on the browser
+     * configured in the settings file.
+     *
+     * Selenium Manager automatically resolves the compatible browser driver.
+     *
+     * @return configured WebDriver instance
+     */
     public static WebDriver createDriver() {
 
-        String browser = SettingsReader.getBrowser().toLowerCase();
+        String browser = SettingsReader.getBrowser();
+
+        if (browser == null || browser.isBlank()) {
+            throw new IllegalStateException(
+                    "Browser is missing from the settings configuration."
+            );
+        }
+
         WebDriver driver;
 
-        switch (browser) {
+        switch (browser.trim().toLowerCase(Locale.ROOT)) {
 
             case "chrome":
-                setChromeDriverPath();
-
-                ChromeOptions chromeOptions = new ChromeOptions();
-
-                if (SettingsReader.isHeadless()) {
-                    chromeOptions.addArguments("--headless=new");
-                }
-
-                chromeOptions.addArguments("--remote-allow-origins=*");
-                driver = new ChromeDriver(chromeOptions);
+                driver = createChromeDriver();
                 break;
 
             case "firefox":
-                setGeckoDriverPath();
-
-                FirefoxOptions firefoxOptions = new FirefoxOptions();
-
-                if (SettingsReader.isHeadless()) {
-                    firefoxOptions.addArguments("-headless");
-                }
-
-                driver = new FirefoxDriver(firefoxOptions);
+                driver = createFirefoxDriver();
                 break;
 
             default:
-                throw new RuntimeException("Unsupported browser: " + browser);
+                throw new IllegalArgumentException(
+                        "Unsupported browser: " + browser
+                                + ". Supported browsers are: chrome and firefox."
+                );
         }
 
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(SettingsReader.getImplicitWait()));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(SettingsReader.getPageLoadTimeout()));
-
-        if (SettingsReader.isMaximize()) {
-            driver.manage().window().maximize();
-        }
+        configureDriver(driver);
 
         return driver;
     }
 
-    private static void setChromeDriverPath() {
-        String path = ".." + File.separator + "drivers" + File.separator + "linux" + File.separator + "chromedriver";
-        validateDriverFile(path);
-        System.setProperty("webdriver.chrome.driver", path);
-    }
+    /**
+     * Creates ChromeDriver using Selenium Manager.
+     */
+    private static WebDriver createChromeDriver() {
 
-    private static void setGeckoDriverPath() {
-        String path = ".." + File.separator + "drivers" + File.separator + "linux" + File.separator + "geckodriver";
-        validateDriverFile(path);
-        System.setProperty("webdriver.gecko.driver", path);
-    }
+        ChromeOptions chromeOptions = new ChromeOptions();
 
-    private static void validateDriverFile(String path) {
-        File file = new File(path);
+        /*
+         * EAGER waits for the HTML document to load, but does not wait
+         * for every image, advertisement, analytics call, or background
+         * resource to finish loading.
+         */
+        chromeOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);
 
-        if (!file.exists()) {
-            throw new RuntimeException("Driver file not found: " + file.getAbsolutePath());
+        if (SettingsReader.isHeadless()) {
+            chromeOptions.addArguments("--headless=new");
+            chromeOptions.addArguments("--window-size=1920,1080");
         }
 
-        if (!file.canExecute()) {
-            throw new RuntimeException("Driver file is not executable. Run: chmod +x " + file.getPath());
+        chromeOptions.addArguments("--remote-allow-origins=*");
+        chromeOptions.addArguments("--disable-notifications");
+        chromeOptions.addArguments("--disable-popup-blocking");
+        chromeOptions.addArguments("--disable-dev-shm-usage");
+        chromeOptions.addArguments("--no-default-browser-check");
+        chromeOptions.addArguments("--no-first-run");
+        chromeOptions.addArguments("--disable-background-networking");
+
+        return new ChromeDriver(chromeOptions);
+    }
+
+    /**
+     * Creates FirefoxDriver using Selenium Manager.
+     */
+    private static WebDriver createFirefoxDriver() {
+
+        FirefoxOptions firefoxOptions = new FirefoxOptions();
+
+        firefoxOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);
+
+        if (SettingsReader.isHeadless()) {
+            firefoxOptions.addArguments("-headless");
+            firefoxOptions.addArguments("--width=1920");
+            firefoxOptions.addArguments("--height=1080");
+        }
+
+        return new FirefoxDriver(firefoxOptions);
+    }
+
+    /**
+     * Applies common timeout and window configuration.
+     */
+    private static void configureDriver(WebDriver driver) {
+
+        driver.manage()
+                .timeouts()
+                .implicitlyWait(
+                        Duration.ofSeconds(SettingsReader.getImplicitWait())
+                );
+
+        driver.manage()
+                .timeouts()
+                .pageLoadTimeout(
+                        Duration.ofSeconds(SettingsReader.getPageLoadTimeout())
+                );
+
+        driver.manage()
+                .timeouts()
+                .scriptTimeout(Duration.ofSeconds(60));
+
+        if (SettingsReader.isMaximize() && !SettingsReader.isHeadless()) {
+            driver.manage().window().maximize();
         }
     }
 }
