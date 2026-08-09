@@ -42,7 +42,7 @@ public class MarriotBonVoyDashboard {
     @FindBy (xpath = "//input[@aria-label='sign in password']")
     private WebElement Password;
 
-    @FindBy (xpath = "//div[text()='Sign In']")
+    @FindBy(xpath = "//span[@aria-hidden='true' and normalize-space()='Sign In or Join']")
     private WebElement signInButton;
 
     public String getPageTitle() {
@@ -66,13 +66,7 @@ public class MarriotBonVoyDashboard {
         return new FindaHotelPage(driver);
     }
 
-    //public void clickHeaderSignInLink(){
-        //wait.until(ExpectedConditions.elementToBeClickable(headerSignInLin)).click();
-
-    
-     
-
-     public void loginToMarriottBonVoy(String email, String password) {
+    public void loginToMarriottBonVoy(String email, String password) {
 
         
         WebElement headerSignInLink = wait.until(
@@ -82,12 +76,17 @@ public class MarriotBonVoyDashboard {
         
 
         wait.until(ExpectedConditions.visibilityOf(emailAddress)).clear();
-      emailAddress.sendKeys(email);
+        emailAddress.sendKeys(email);
 
         wait.until(ExpectedConditions.visibilityOf(Password)).clear();
         Password.sendKeys(password);
 
         wait.until(ExpectedConditions.elementToBeClickable(signInButton)).click();
+    }
+
+    public SignInPage clickSignInOrJoin() {
+        wait.until(ExpectedConditions.elementToBeClickable(signInButton)).click();
+        return new SignInPage(driver);
     }
 }
 

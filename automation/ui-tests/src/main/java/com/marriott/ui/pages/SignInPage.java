@@ -1,53 +1,60 @@
 package com.marriott.ui.pages;
 
-import java.security.PrivateKey;
-
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 
 public class SignInPage {
 
     private WebDriver driver;
-    private MarriotBonVoyDashboard dashboard;
+    private WebDriverWait wait;
 
-    @BeforeClass
-    public void setUp() {
-        driver = new ChromeDriver();
-        
+    public SignInPage(WebDriver driver) {
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        PageFactory.initElements(driver, this);
     }
 
-    @BeforeMethod
-    public void navigateToHomePage() {
-        driver.get("https://www.marriott.com/");
-        dashboard = new MarriotBonVoyDashboard(driver);
+    @FindBy(xpath = "//a[@role='link' and normalize-space()='Activate online account']")
+    private WebElement activateOnlineAccountLink;
+
+    public ActivateOnlineAccountPage clickActivateOnlineAccount() {
+
+        wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        activateOnlineAccountLink
+                )
+        ).click();
+
+        return new ActivateOnlineAccountPage(driver);
     }
 
-    @Test(description = "Validate Marriott BonVoy login functionality")
-    public void verifyLoginFunctionality() {
 
-        String email = "testuser@gmail.com";
-        String password = "Test@123";
+    /*
+     * Optional validation method
+     */
+    public boolean isActivateOnlineAccountLinkDisplayed() {
 
-        dashboard.loginToMarriottBonVoy(email, password);
-
-        
+        return wait.until(
+                ExpectedConditions.visibilityOf(
+                        activateOnlineAccountLink
+                )
+        ).isDisplayed();
     }
-
-    @AfterClass
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-
-    
-
-
-
-    
+      
 }
+
+
+
+
+
+
+
+
+        
