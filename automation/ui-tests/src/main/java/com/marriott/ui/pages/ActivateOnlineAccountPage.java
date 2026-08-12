@@ -48,6 +48,9 @@ public class ActivateOnlineAccountPage {
     @FindBy(xpath = "//button[@data-testid='continue-btn' and @aria-label='Continue']")
     private WebElement continueButton;
 
+     @FindBy(xpath = "//u[text()='Look up']")
+    private WebElement lookUpMemberNumberLink;
+
 
     /*
      * =========================================================
@@ -93,6 +96,21 @@ public class ActivateOnlineAccountPage {
                 ExpectedConditions.visibilityOf(continueButton)
         ).isEnabled();
     }
+
+public boolean isLookUpButtonDisplayed() {
+
+        return wait.until(
+                ExpectedConditions.visibilityOf(lookUpMemberNumberLink)
+        ).isDisplayed();
+    }
+
+    public boolean isLookUpButtonEnabled() {
+
+        return wait.until(
+                ExpectedConditions.visibilityOf(lookUpMemberNumberLink)
+        ).isEnabled();
+    }
+
 
     /*
      * =========================================================
@@ -192,6 +210,15 @@ public class ActivateOnlineAccountPage {
         ).getText().trim();
     }
 
+    public String getLookUpButtonText() {
+    return wait.until(
+            ExpectedConditions.visibilityOf(lookUpMemberNumberLink)
+        ).getText().trim();
+    }
+
+
+
+
     /*
      * =========================================================
      * CONTINUE ACTION
@@ -204,6 +231,11 @@ public class ActivateOnlineAccountPage {
         ).click();
     }
 
+    public void clickLookUpButton() {
+        wait.until(
+            ExpectedConditions.elementToBeClickable(lookUpMemberNumberLink)
+        ).click();
+    }
 
     /*
      * =========================================================

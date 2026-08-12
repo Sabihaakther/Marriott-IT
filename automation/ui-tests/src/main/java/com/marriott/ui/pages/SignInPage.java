@@ -24,6 +24,11 @@ public class SignInPage {
     @FindBy(xpath = "//a[@role='link' and normalize-space()='Activate online account']")
     private WebElement activateOnlineAccountLink;
 
+    @FindBy(xpath = "//u[text()='Look up']")
+    private WebElement lookUpMemberNumberLink;
+    
+    
+    
     public ActivateOnlineAccountPage clickActivateOnlineAccount() {
 
         wait.until(
@@ -47,7 +52,33 @@ public class SignInPage {
                 )
         ).isDisplayed();
     }
-      
+   
+    public LookUpMemberNumberPage  clickLookUpMemberNumber() {
+ 
+        wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        lookUpMemberNumberLink
+                )
+        ).click();
+
+        return new LookUpMemberNumberPage (driver);
+    }
+
+
+    /*
+     * Optional validation method
+     */
+    public boolean isLookUpMemberNumberPageLinkDisplayed() {
+
+        return wait.until(
+                ExpectedConditions.visibilityOf(
+                        lookUpMemberNumberLink
+                )
+        ).isDisplayed();
+    }
+
+
+
 }
 
 
