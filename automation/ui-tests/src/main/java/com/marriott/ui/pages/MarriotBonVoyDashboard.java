@@ -1,5 +1,6 @@
 package com.marriott.ui.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -32,6 +33,18 @@ public class MarriotBonVoyDashboard {
     @FindBy(xpath = "//*[self::a or self::button][contains(normalize-space(),'Find a Hotel')]")
     private WebElement findAHotelLink;
 
+    //@FindBy(xpath = "//a[@data-dialog-id='m-header-signin-dialog-header']")
+    //private WebElement headerSignInLin;
+
+    @FindBy (xpath = "//input[@aria-label='email or member number']")
+    private WebElement emailAddress;
+
+    @FindBy (xpath = "//input[@aria-label='sign in password']")
+    private WebElement Password;
+
+    @FindBy(xpath = "//span[@aria-hidden='true' and normalize-space()='Sign In or Join']")
+    private WebElement signInButton;
+
     public String getPageTitle() {
         return driver.getTitle();
     }
@@ -52,4 +65,36 @@ public class MarriotBonVoyDashboard {
         wait.until(ExpectedConditions.elementToBeClickable(findAHotelLink)).click();
         return new FindaHotelPage(driver);
     }
+
+    public void loginToMarriottBonVoy(String email, String password) {
+
+        
+        WebElement headerSignInLink = wait.until(
+                ExpectedConditions.elementToBeClickable(By.xpath("//a[@data-dialog-id='m-header-signin-dialog-header']")));
+        
+        headerSignInLink.click();
+        
+
+        wait.until(ExpectedConditions.visibilityOf(emailAddress)).clear();
+        emailAddress.sendKeys(email);
+
+        wait.until(ExpectedConditions.visibilityOf(Password)).clear();
+        Password.sendKeys(password);
+
+        wait.until(ExpectedConditions.elementToBeClickable(signInButton)).click();
+    }
+
+    public SignInPage clickSignInOrJoin() {
+        wait.until(ExpectedConditions.elementToBeClickable(signInButton)).click();
+        return new SignInPage(driver);
+    }
 }
+
+
+
+
+
+
+
+
+        
