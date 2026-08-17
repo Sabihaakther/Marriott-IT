@@ -48,7 +48,7 @@ public class ActivateOnlineAccountPage {
     @FindBy(xpath = "//button[@data-testid='continue-btn' and @aria-label='Continue']")
     private WebElement continueButton;
 
-     @FindBy(xpath = "//u[text()='Look up']")
+    @FindBy(xpath = "//a[@href='/lookUpMemberNumber.mi' and normalize-space()='Look up member number']")
     private WebElement lookUpMemberNumberLink;
 
 
@@ -58,67 +58,52 @@ public class ActivateOnlineAccountPage {
      * =========================================================
      */
 
-    public boolean isMemberNumberFieldDisplayed() {
+public boolean isMemberNumberFieldDisplayed() {
 
         return wait.until(
                 ExpectedConditions.visibilityOf(memberNumberField)
         ).isDisplayed();
     }
 
-    public boolean isFirstNameFieldDisplayed() {
+public boolean isFirstNameFieldDisplayed() {
         return wait.until(
                 ExpectedConditions.visibilityOf(firstNameField)
         ).isDisplayed();
     }
 
-    public boolean isLastNameFieldDisplayed() {
+public boolean isLastNameFieldDisplayed() {
         return wait.until(
                 ExpectedConditions.visibilityOf(lastNameField)
         ).isDisplayed();
     }
 
-    public boolean isZipPostalCodeFieldDisplayed() {
+public boolean isZipPostalCodeFieldDisplayed() {
         return wait.until(
                 ExpectedConditions.visibilityOf(zipPostalCodeField)
         ).isDisplayed();
     }
 
-    public boolean isContinueButtonDisplayed() {
+public boolean isContinueButtonDisplayed() {
 
         return wait.until(
                 ExpectedConditions.visibilityOf(continueButton)
         ).isDisplayed();
     }
 
-    public boolean isContinueButtonEnabled() {
+public boolean isContinueButtonEnabled() {
 
         return wait.until(
                 ExpectedConditions.visibilityOf(continueButton)
         ).isEnabled();
     }
 
-public boolean isLookUpButtonDisplayed() {
+ /*
+ * =========================================================
+* INDIVIDUAL INPUT METHODS
+* =========================================================
+*/
 
-        return wait.until(
-                ExpectedConditions.visibilityOf(lookUpMemberNumberLink)
-        ).isDisplayed();
-    }
-
-    public boolean isLookUpButtonEnabled() {
-
-        return wait.until(
-                ExpectedConditions.visibilityOf(lookUpMemberNumberLink)
-        ).isEnabled();
-    }
-
-
-    /*
-     * =========================================================
-     * INDIVIDUAL INPUT METHODS
-     * =========================================================
-     */
-
-    public void enterMemberNumber(String memberNumber) {
+public void enterMemberNumber(String memberNumber) {
 
         WebElement element = wait.until(
                 ExpectedConditions.visibilityOf(memberNumberField)
@@ -127,7 +112,7 @@ public boolean isLookUpButtonDisplayed() {
         element.sendKeys(memberNumber);
     }
 
-    public void enterFirstName(String firstName) {
+public void enterFirstName(String firstName) {
 
         WebElement element = wait.until(
                 ExpectedConditions.visibilityOf(firstNameField)
@@ -136,7 +121,7 @@ public boolean isLookUpButtonDisplayed() {
         element.sendKeys(firstName);
     }
 
-    public void enterLastName(String lastName) {
+public void enterLastName(String lastName) {
 
         WebElement element = wait.until(
                 ExpectedConditions.visibilityOf(lastNameField)
@@ -146,7 +131,7 @@ public boolean isLookUpButtonDisplayed() {
         element.sendKeys(lastName);
     }
 
-    public void enterZipPostalCode(String zipPostalCode) {
+public void enterZipPostalCode(String zipPostalCode) {
 
         WebElement element = wait.until(
                 ExpectedConditions.visibilityOf(zipPostalCodeField)
@@ -156,7 +141,6 @@ public boolean isLookUpButtonDisplayed() {
         element.sendKeys(zipPostalCode);
     }
 
-   
     /*
      * =========================================================
      * GET ENTERED FIELD VALUES
@@ -180,7 +164,6 @@ public boolean isLookUpButtonDisplayed() {
     public String getEnteredZipPostalCode() {
     return zipPostalCodeField.getAttribute("value");
     }
-
 
     /*
      * =========================================================
@@ -216,9 +199,6 @@ public boolean isLookUpButtonDisplayed() {
         ).getText().trim();
     }
 
-
-
-
     /*
      * =========================================================
      * CONTINUE ACTION
@@ -250,4 +230,42 @@ public boolean isLookUpButtonDisplayed() {
     public String getCurrentUrl() {
     return driver.getCurrentUrl();
     }
+
+/*
+ * =========================================================
+ * LOOK UP MEMBER NUMBER METHODS
+ * =========================================================
+ */
+
+public boolean isLookUpMemberNumberLinkDisplayed() {
+
+    return wait.until(
+            ExpectedConditions.visibilityOf(
+                    lookUpMemberNumberLink
+            )
+    ).isDisplayed();
+}
+
+
+public boolean isLookUpMemberNumberLinkEnabled() {
+
+    return wait.until(
+            ExpectedConditions.visibilityOf(
+                    lookUpMemberNumberLink
+            )
+    ).isEnabled();
+}
+
+public LookUpMemberNumberPage clickLookUpMemberNumber() {
+
+    wait.until(
+            ExpectedConditions.elementToBeClickable(
+                    lookUpMemberNumberLink
+            )
+    ).click();
+
+    return new LookUpMemberNumberPage(driver);
+}
+ 
+
 }

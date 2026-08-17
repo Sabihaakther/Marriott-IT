@@ -1,205 +1,260 @@
 package com.marriott.ui.pages;
 
-import java.time.Duration;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
 public class LookUpMemberNumberPage {
 
-    private WebDriver driver;
     private WebDriverWait wait;
 
-    public LookUpMemberNumberPage(WebDriver driver) {
+    /*
+     * =========================================================
+     * CONSTRUCTOR
+     * =========================================================
+     *
+     * This Page Object is initialized after WebDriver
+     * switches from ActivateOnlineAccountPage to the
+     * new Look Up Member Number browser tab.
+     */
 
-        this.driver = driver;
+    public LookUpMemberNumberPage(WebDriver driver) {
 
         this.wait = new WebDriverWait(
                 driver,
                 Duration.ofSeconds(20)
         );
 
+        /*
+         * Initialize all @FindBy elements
+         * belonging to this page.
+         */
         PageFactory.initElements(driver, this);
     }
 
-
-    /*
-     * =========================================================
-     * PAGE ELEMENTS
-     * =========================================================
-     */
-
+    @FindBy(xpath = "//h4[normalize-space()='Look Up Member Number']")
+    private WebElement lookUpMemberNumberHeading;
      
     @FindBy(id = "input-Email")
-    private WebElement emailAddressField;
+    private WebElement emailField;
 
     @FindBy(id = "input-firstName")
-    private WebElement lookupfirstNameField;
+    private WebElement firstNameField;
 
     @FindBy(id = "input-lastName")
-    private WebElement lookuplastNameField;
+    private WebElement lastNameField;
+     
+    @FindBy(xpath = "//div[@id='dropdownfp-country-code' and @role='combobox']")
+    private WebElement countryRegionDropdown;
 
-    @FindBy(xpath = "//div[text()='Submit']")
+    @FindBy(css = "button[data-testid='submitButtonLabel']")
     private WebElement submitButton;
 
-     @FindBy(xpath = "//u[text()='Look up']")
-    private WebElement lookUpMemberNumberLink;
+    @FindBy(xpath = "//a[contains(@href,'loyalty-customer-support.mi') and contains(normalize-space(),'Contact Us')]")
+    private WebElement contactUsLink;
 
 
     /*
      * =========================================================
-     * PAGE VALIDATION METHODS
+     * LOOK UP MEMBER NUMBER HEADING METHODS
      * =========================================================
      */
 
-    public boolean isEmailAddressFieldDisplayed() {
+    public boolean isLookUpMemberNumberHeadingDisplayed() {
 
         return wait.until(
-                ExpectedConditions.visibilityOf(emailAddressField)
+                ExpectedConditions.visibilityOf(
+                        lookUpMemberNumberHeading
+                )
         ).isDisplayed();
     }
 
-    public boolean isLookupFirstNameFieldDisplayed() {
+
+    public String getLookUpMemberNumberHeadingText() {
+
         return wait.until(
-                ExpectedConditions.visibilityOf(lookupfirstNameField)
+                ExpectedConditions.visibilityOf(
+                        lookUpMemberNumberHeading
+                )
+        ).getText().trim();
+    }
+
+    public boolean isEmailFieldDisplayed() {
+
+        return wait.until(
+                ExpectedConditions.visibilityOf(
+                        emailField
+                )
         ).isDisplayed();
     }
 
-    public boolean isLookupLastNameFieldDisplayed() {
+    public boolean isEmailFieldEnabled() {
+
         return wait.until(
-                ExpectedConditions.visibilityOf(lookuplastNameField)
+                ExpectedConditions.visibilityOf(
+                        emailField
+                )
+        ).isEnabled();
+    }
+
+    public void enterEmail(String email) {
+
+        WebElement element = wait.until(
+                ExpectedConditions.visibilityOf(
+                        emailField
+                )
+        );
+
+        element.clear();
+        element.sendKeys(email);
+    }
+
+    public String getEnteredEmail() {
+
+        return emailField.getAttribute("value");
+    }
+
+    public String getEmailMaxLength() {
+
+        return emailField.getAttribute("maxlength");
+    }
+
+    public boolean isFirstNameFieldDisplayed() {
+
+        return wait.until(
+                ExpectedConditions.visibilityOf(
+                        firstNameField
+                )
         ).isDisplayed();
+    }
+
+    public boolean isFirstNameFieldEnabled() {
+
+        return wait.until(
+                ExpectedConditions.visibilityOf(
+                        firstNameField
+                )
+        ).isEnabled();
+    }
+
+    public void enterFirstName(String firstName) {
+
+        WebElement element = wait.until(
+                ExpectedConditions.visibilityOf(
+                        firstNameField
+                )
+        );
+
+        element.clear();
+        element.sendKeys(firstName);
+    }
+
+    public String getEnteredFirstName() {
+
+        return firstNameField.getAttribute("value");
+    }
+
+    public String getFirstNameMaxLength() {
+
+        return firstNameField.getAttribute("maxlength");
+    }
+
+    public boolean isLastNameFieldDisplayed() {
+
+        return wait.until(
+                ExpectedConditions.visibilityOf(
+                        lastNameField
+                )
+        ).isDisplayed();
+    }
+
+    public boolean isLastNameFieldEnabled() {
+
+        return wait.until(
+                ExpectedConditions.visibilityOf(
+                        lastNameField
+                )
+        ).isEnabled();
+    }
+
+    public void enterLastName(String lastName) {
+
+        WebElement element = wait.until(
+                ExpectedConditions.visibilityOf(
+                        lastNameField
+                )
+        );
+
+        element.clear();
+        element.sendKeys(lastName);
+    }
+
+    public String getEnteredLastName() {
+
+        return lastNameField.getAttribute("value");
+    }
+
+    public String getLastNameMaxLength() {
+
+        return lastNameField.getAttribute("maxlength");
     }
 
     public boolean isSubmitButtonDisplayed() {
 
         return wait.until(
-                ExpectedConditions.visibilityOf(submitButton)
+                ExpectedConditions.visibilityOf(
+                        submitButton
+                )
         ).isDisplayed();
     }
 
     public boolean isSubmitButtonEnabled() {
 
         return wait.until(
-                ExpectedConditions.visibilityOf(submitButton)
+                ExpectedConditions.visibilityOf(
+                        submitButton
+                )
         ).isEnabled();
     }
 
-    /*
-     * =========================================================
-     * INDIVIDUAL INPUT METHODS
-     * =========================================================
-     */
+    public String getSubmitButtonText() {
 
-    public void enterEmailAddress(String emailaddress) {
-
-        WebElement element = wait.until(
-                ExpectedConditions.visibilityOf(emailAddressField)
-        );
-        element.clear();
-        element.sendKeys(emailaddress);
-    }
-
-    public void enterLookupFirstName(String lookupirstName) {
-
-        WebElement element = wait.until(
-                ExpectedConditions.visibilityOf(lookupfirstNameField)
-        );
-        element.clear();
-        element.sendKeys(lookupirstName);
-    }
-
-    public void enterLookupLastName(String lookuplastName) {
-
-        WebElement element = wait.until(
-                ExpectedConditions.visibilityOf(lookuplastNameField)
-        );
-
-        element.clear();
-        element.sendKeys(lookuplastName);
-    }
-
-    
-
-   
-    /*
-     * =========================================================
-     * GET ENTERED FIELD VALUES
-     * =========================================================
-     *
-     * These methods are useful for assertEquals validations.
-     */
-
-    public String getEnteredMemberNumber() {
-    return emailAddressField.getAttribute("value");
-    }
-
-    public String getEnteredFirstName() {
-    return lookupfirstNameField.getAttribute("value");
-    }
-
-    public String getEnteredLastName() {
-    return lookuplastNameField.getAttribute("value");
-    }
-
-   
-
-
-    /*
-     * =========================================================
-     * ATTRIBUTE VALIDATIONS
-     * =========================================================
-     */
-
-    public String getMemberNumberMaxLength() {
-    return emailAddressField.getAttribute("maxlength");
-    }
-
-    public String getFirstNameMaxLength() {
-    return lookupfirstNameField.getAttribute("maxlength");
-    }
-
-    public String getLastNameMaxLength() {
-    return lookuplastNameField.getAttribute("maxlength");
-    }
-
-     public String getSubmitButtonText() {
-    return wait.until(
-            ExpectedConditions.visibilityOf(submitButton)
+        return wait.until(
+                ExpectedConditions.visibilityOf(
+                        submitButton
+                )
         ).getText().trim();
     }
 
-    /*
-     * =========================================================
-     * CONTINUE ACTION
-     * =========================================================
-     */
-
     public void clickSubmitButton() {
+
         wait.until(
-            ExpectedConditions.elementToBeClickable(submitButton)
+                ExpectedConditions.elementToBeClickable(
+                        submitButton
+                )
         ).click();
     }
 
+    public boolean isContactUsLinkDisplayed() {
 
-    /*
-     * =========================================================
-     * BASIC PAGE INFORMATION
-     * =========================================================
-     */
-
-    public String getPageTitle() {
-    return driver.getTitle();
+        return wait.until(
+                ExpectedConditions.visibilityOf(
+                        contactUsLink
+                )
+        ).isDisplayed();
     }
 
-    public String getCurrentUrl() {
-    return driver.getCurrentUrl();
+    public boolean isContactUsLinkEnabled() {
+
+        return wait.until(
+                ExpectedConditions.visibilityOf(
+                        contactUsLink
+                )
+        ).isEnabled();
     }
+  
 }
-
-    
-
