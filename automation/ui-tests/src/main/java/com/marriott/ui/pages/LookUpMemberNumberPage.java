@@ -57,6 +57,8 @@ public class LookUpMemberNumberPage {
     @FindBy(xpath = "//a[contains(@href,'loyalty-customer-support.mi') and contains(normalize-space(),'Contact Us')]")
     private WebElement contactUsLink;
 
+    @FindBy(xpath = "//div[contains(@class,'error') or contains(@class,'alert') or contains(text(),'Your information does not match')]")
+    private WebElement lookupErrorMessage;
 
     /*
      * =========================================================
@@ -256,5 +258,14 @@ public class LookUpMemberNumberPage {
                 )
         ).isEnabled();
     }
+
+    public boolean isLookupErrorMessageDisplayed() {
+    return wait.until(ExpectedConditions.visibilityOf(lookupErrorMessage)).isDisplayed();
+}
+
+    public String getLookupErrorMessageText() {
+    return wait.until(ExpectedConditions.visibilityOf(lookupErrorMessage)).getText().trim();
+}
+
   
 }

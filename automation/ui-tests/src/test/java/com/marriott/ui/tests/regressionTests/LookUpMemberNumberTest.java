@@ -275,6 +275,26 @@ public void testLookUpMemberNumber() throws InterruptedException {
             "Contact Us link was not enabled."
     );
 
+    logger("Step-34: Click Submit button");
+lookUpMemberNumberPage.clickSubmitButton();
+
+logger("Step-35: Verify error message is displayed after submitting invalid information");
+
+assertEquals(
+        lookUpMemberNumberPage.isLookupErrorMessageDisplayed(),
+        true,
+        "Error message was not displayed after submitting invalid information."
+);
+
+logger("Step-36: Verify error message text");
+
+assertEquals(
+        lookUpMemberNumberPage.getLookupErrorMessageText(),
+        "Please correct the following and try again.\n• Your information does not match your account.",
+        "Error message text did not match the expected value."
+);
+
+
     /*
      * Country / Region dropdown automation
      * will be handled separately by Sabiha.
