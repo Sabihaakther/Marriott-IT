@@ -262,9 +262,10 @@ public class LookUpMemberNumberPage {
     public boolean isLookupErrorMessageDisplayed() {
     return wait.until(ExpectedConditions.visibilityOf(lookupErrorMessage)).isDisplayed();
 }
-
     public String getLookupErrorMessageText() {
+        System.out.println("Get the text from the DOM:" + lookupErrorMessage.getText().trim());
     return wait.until(ExpectedConditions.visibilityOf(lookupErrorMessage)).getText().trim();
+    
 }
 
   
