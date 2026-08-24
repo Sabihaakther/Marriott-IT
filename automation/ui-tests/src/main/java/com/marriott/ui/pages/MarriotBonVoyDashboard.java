@@ -45,8 +45,15 @@ public class MarriotBonVoyDashboard {
     @FindBy(xpath = "//span[@aria-hidden='true' and normalize-space()='Sign In or Join']")
     private WebElement signInButton;
 
-    @FindBy (xpath = "//span[text()='Our Credit Cards']")
-    private WebElement ourCreditCardLink;
+     @FindBy(xpath = "//button[contains(@data-testid,'credit-cards')]")
+    private WebElement creditCardButton;
+
+   
+    
+    
+    
+    //FindBy (xpath = "//span[text()='Our Credit Cards']")
+    //rivate WebElement ourCreditCardLink;
 
   // @FindBy(xpath = " //a[contains(text(), 'See Details')]")
      //private WebElement SeeDetailsLink;
@@ -80,11 +87,15 @@ public class MarriotBonVoyDashboard {
     }
 
      public  OurCreditCardPage clickCreditCard() {
-        wait.until(ExpectedConditions.elementToBeClickable(ourCreditCardLink)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(creditCardButton)).click();
         return new OurCreditCardPage(driver);
     }
 
     
+
+
+
+
      public void loginToMarriottBonVoy(String email, String password) {
 
         
@@ -103,7 +114,7 @@ public class MarriotBonVoyDashboard {
         wait.until(ExpectedConditions.elementToBeClickable(signInButton)).click();
     }
 
-    public SignInPage clickSignInOrJoin() {
+        public SignInPage clickSignInOrJoin() {
         wait.until(ExpectedConditions.elementToBeClickable(signInButton)).click();
         return new SignInPage(driver);
     }
