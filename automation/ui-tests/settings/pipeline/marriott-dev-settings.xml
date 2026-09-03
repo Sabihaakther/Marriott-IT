@@ -40,7 +40,7 @@
 
     <api>
 
-        <baseUrl>https://www.marriott.com</baseUrl>
+        <baseUrl>https://marriott.com</baseUrl>
 
         <connectionTimeout>30000</connectionTimeout>
 

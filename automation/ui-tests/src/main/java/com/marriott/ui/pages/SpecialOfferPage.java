@@ -1,9 +1,9 @@
 package com.marriott.ui.pages;
+import java.time.Duration;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.*;
 import org.openqa.selenium.support.ui.*;
 
-import java.time.Duration;
 
 public class SpecialOfferPage {
 
